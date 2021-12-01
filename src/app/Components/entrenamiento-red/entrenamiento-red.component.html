@@ -1,0 +1,31 @@
+<div class="contenedor">
+    <div class="Params_entrada">
+        <label>Parametros de Entrada</label>
+        <form [formGroup]="ParamEnt">
+            <h4>Ubicacion de los barrios</h4>
+            <button type="button" class="btn btn-primary" (click)="fileInput.click()">
+               Cargar Datos
+            </button>
+            <input type="file" id="fileDistrict" hidden #fileInput (change)="onChange($event)" />
+            <h4>Tamaño de la Poblacion</h4>
+            <input type="number" class="form-control" formControlName="pop_size">
+            <h4>Tamaño Elite</h4>
+            <input type="number" class="form-control" formControlName="elite_size">
+            <h4>Ratio de Mutacion</h4>
+            <input type="number" class="form-control" formControlName="mutation_rate">
+            <h4>N° de Generaciones</h4>
+            <input type="number" class="form-control" formControlName="n_generations">
+            <button type="button" (click)="InicializarAlgoritmo()" [disabled]="ParamEnt.invalid" class="btn btn-primary">Iniciar Algoritmo</button>
+        </form>
+    </div>
+    <div class="Grafica">
+        <label>Grafica</label>
+        <ngx-charts-line-chart class="grafi" [view]="view" [scheme]="colorScheme" [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel" [xAxis]="xAxis" [yAxis]="yAxis" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel" [timeline]="timeline" [results]="multi"
+            (select)="onSelect($event)" (activate)="onActivate($event)" (deactivate)="onDeactivate($event)">
+        </ngx-charts-line-chart>
+    </div>
+    <div class="Mapa">
+        <label>Mapa</label>
+
+    </div>
+</div>

@@ -1,0 +1,50 @@
+* {
+    margin: 0;
+    padding: 0;
+    outline: 0;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.contenedor {
+    width: 90%;
+    max-width: 1000px;
+    margin: 20px auto;
+    display: grid;
+    grid-gap: 20px;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(3, auto);
+}
+
+.contenedor .Params_entrada,
+.contenedor .Mapa,
+.contenedor .Grafica {
+    background: #fff;
+    padding: 20px;
+    border-radius: 4px;
+    box-shadow: 5px 0 10px rgba(0, 0, 0, .6);
+    text-align: center;
+}
+
+.contenedor .Mapa,
+.contenedor .Grafica {
+    grid-column-start: 1;
+    grid-column-end: -1;
+}
+
+.contenedor div label {
+    color: #3538e0;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 10px;
+}
+
+.contenedor .Params_entrada h4 {
+    font-size: 15px;
+    padding: 10px;
+}
+
+.contenedor .Params_entrada .btn {
+    font-size: 15px;
+    padding: 10px;
+    margin: 20px;
+}
