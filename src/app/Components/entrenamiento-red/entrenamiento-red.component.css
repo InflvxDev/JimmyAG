@@ -15,6 +15,9 @@
     grid-template-rows: repeat(3, auto);
 }
 
+.image-back {
+  background-image: url("\src\app\images\map_valle.png");
+}
 .contenedor .Params_entrada,
 .contenedor .Mapa,
 .contenedor .Grafica {

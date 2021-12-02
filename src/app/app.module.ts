@@ -8,6 +8,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { EntrenamientoRedComponent } from './Components/entrenamiento-red/entrenamiento-red.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { HttpClientModule } from '@angular/common/http';
+import { NgApexchartsModule } from "ng-apexcharts";
+
 
 @NgModule({
   declarations: [
@@ -22,8 +24,8 @@ import { HttpClientModule } from '@angular/common/http';
     ReactiveFormsModule,
     NgxChartsModule,
     BrowserAnimationsModule,
-    HttpClientModule
-    
+    HttpClientModule,
+    NgApexchartsModule
   ],
   providers: [],
   bootstrap: [AppComponent],

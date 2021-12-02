@@ -1,5 +1,8 @@
 import { District } from './district';
 export class TspResponse {
-    best_route: District[];
+    list_best_route: any[]
     progress: number[] = [];
 }
+
+
+

@@ -1,7 +1,30 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { InitTsp } from '../../Models/InitTsp';
 import { EntrenamientoService } from '../../Services/entrenamiento.service';
+
+import {
+  ChartComponent,
+  ApexAxisChartSeries,
+  ApexChart,
+  ApexXAxis,
+  ApexDataLabels,
+  ApexTitleSubtitle,
+  ApexStroke,
+  ApexGrid
+} from "ng-apexcharts";
+import { District } from 'src/app/Models/district';
+
+export type ChartOptions = {
+  series: ApexAxisChartSeries;
+  chart: ApexChart;
+  xaxis: ApexXAxis;
+  dataLabels: ApexDataLabels;
+  grid: ApexGrid;
+  stroke: ApexStroke;
+  title: ApexTitleSubtitle;
+};
+
 
 @Component({
   selector: 'app-entrenamiento-red',
@@ -9,15 +32,20 @@ import { EntrenamientoService } from '../../Services/entrenamiento.service';
   styleUrls: ['./entrenamiento-red.component.css']
 })
 export class EntrenamientoRedComponent implements OnInit {
-  
+
+  @ViewChild("chart") chart: ChartComponent;
+  public chartOptions: Partial<ChartOptions>;
+
   datosEntrada : InitTsp;
   fileContent: string;
   vectorDistrict = [];
   constructor(private formBuilder: FormBuilder, private entrenamientoService: EntrenamientoService) {
     this.datosEntrada = new InitTsp();
+    this.initGrafica();
    }
 
   ngOnInit(): void {
+
   }
 
 
@@ -34,6 +62,7 @@ export class EntrenamientoRedComponent implements OnInit {
 
   InicializarAlgoritmo(){
 
+
     this.datosEntrada = this.ParamEnt.value;
     this.mapDistricts();
     console.log(this.datosEntrada);
@@ -41,15 +70,12 @@ export class EntrenamientoRedComponent implements OnInit {
 
     this.entrenamientoService.postinit(this.datosEntrada).subscribe(result =>{
       const progress = result.progress;
-      const best_route = result.best_route;
-      console.log(best_route);
-      let iteraccion : number = 0;
       for (let i = 0; i < progress.length; i++) {
         let copy = this.multi;
-        copy[0].series.push({ name: iteraccion.toString(), value: progress[i] });
+        copy[0].series.push({ name: i.toString(), value: progress[i] });
         this.multi = [...copy];
-       iteraccion ++;
       }
+      this.mapCoordenada(result.list_best_route[0])
     })
   }
 
@@ -76,6 +102,18 @@ export class EntrenamientoRedComponent implements OnInit {
 
   }
 
+  mapCoordenada(districs: any[]) {
+    let copy2 = this.chartOptions.series;
+
+    for (let i = 0; i < districs.length; i++) {
+      copy2[0].data[i] = [districs[i].x,districs[i].y];
+      this.chartOptions.series = [...copy2];
+    }
+
+    copy2[0].data[districs.length] = [districs[0].x,districs[0].y];
+    this.chartOptions.series = [...copy2];
+  }
+
   mapDistricts() {
     this.datosEntrada.list_district = [];
     for (let i = 0; i < this.vectorDistrict.length; i++) {
@@ -87,7 +125,7 @@ export class EntrenamientoRedComponent implements OnInit {
     }
   }
 
-   //-----------------------------------   Grafica  --------------------------------------------- 
+   //-----------------------------------   Grafica  ---------------------------------------------
    view: any[] = [700, 300];
 
    //options
@@ -103,13 +141,13 @@ export class EntrenamientoRedComponent implements OnInit {
    xAxisLabel2: string = 'x';
    yAxisLabel2: string = 'y';
    timeline: boolean = true;
- 
+
    colorScheme = {
      domain: ['#3538e0', '#E44D25', '#CFC0BB', '#7aa3e5', '#a8385d', '#aae3f5']
    };
- 
+
    multi = [
-     
+
      {
        "name": "DistanciaGeneracion",
        "series": [
@@ -117,23 +155,66 @@ export class EntrenamientoRedComponent implements OnInit {
            "name": "0",
            "value": 1
          },
-        
+
        ]
      }
    ]
 
- 
+
    onSelect(data): void {
      console.log('Item clicked', JSON.parse(JSON.stringify(data)));
    }
- 
+
    onActivate(data): void {
      console.log('Activate', JSON.parse(JSON.stringify(data)));
    }
- 
+
    onDeactivate(data): void {
      console.log('Deactivate', JSON.parse(JSON.stringify(data)));
    }
+
+  // -------------------------------- Grafica 2 -------------------------------
+
+
+  initGrafica() {
+    this.chartOptions = {
+      series: [
+        {
+          data: [
+              [0,0]
+          ]
+        }
+      ],
+      chart: {
+        height: 350,
+        type: "line",
+        zoom: {
+          enabled: false
+        }
+      },
+      dataLabels: {
+        enabled: false
+      },
+      stroke: {
+        curve: "straight"
+      },
+      title: {
+        text: "Ruta mas optima",
+        align: "left"
+      },
+      grid: {
+        row: {
+          colors: ["transparent", "transparent"], // takes an array which will be repeated on columns
+          opacity: 0.5
+        }
+      },
+      xaxis: {
+        categories: [
+
+        ]
+      }
+    };
+  }
 
 
 }
