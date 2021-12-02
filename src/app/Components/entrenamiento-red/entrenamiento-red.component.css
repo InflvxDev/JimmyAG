@@ -25,8 +25,7 @@
     text-align: center;
 }
 
-.contenedor .Mapa,
-.contenedor .Grafica {
+.contenedor .Mapa {
     grid-column-start: 1;
     grid-column-end: -1;
 }
@@ -38,7 +37,8 @@
     padding: 10px;
 }
 
-.contenedor .Params_entrada h4 {
+.contenedor .Params_entrada h4,
+.contenedor .Grafica h4 {
     font-size: 15px;
     padding: 10px;
 }

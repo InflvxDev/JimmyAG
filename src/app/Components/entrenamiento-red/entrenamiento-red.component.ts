@@ -41,13 +41,13 @@ export class EntrenamientoRedComponent implements OnInit {
 
     this.entrenamientoService.postinit(this.datosEntrada).subscribe(result =>{
       const progress = result.progress;
-      console.log(progress);
+      const best_route = result.best_route;
+      console.log(best_route);
       let iteraccion : number = 0;
       for (let i = 0; i < progress.length; i++) {
         let copy = this.multi;
         copy[0].series.push({ name: iteraccion.toString(), value: progress[i] });
-       this.multi = [...copy];
-
+        this.multi = [...copy];
        iteraccion ++;
       }
     })
@@ -100,8 +100,8 @@ export class EntrenamientoRedComponent implements OnInit {
    showXAxisLabel: boolean = true;
    xAxisLabel: string = 'Generaciones';
    yAxisLabel: string = 'DistanciaOptima';
-   xAxisLabel2: string = 'NumeroPatrones';
-   yAxisLabel2: string = 'Salidas';
+   xAxisLabel2: string = 'x';
+   yAxisLabel2: string = 'y';
    timeline: boolean = true;
  
    colorScheme = {
@@ -117,12 +117,11 @@ export class EntrenamientoRedComponent implements OnInit {
            "name": "0",
            "value": 1
          },
+        
        ]
      }
    ]
- 
-   
- 
+
  
    onSelect(data): void {
      console.log('Item clicked', JSON.parse(JSON.stringify(data)));
