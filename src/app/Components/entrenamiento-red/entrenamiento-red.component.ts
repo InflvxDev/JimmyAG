@@ -26,6 +26,7 @@ export type ChartOptions = {
 };
 
 
+
 @Component({
   selector: 'app-entrenamiento-red',
   templateUrl: './entrenamiento-red.component.html',
@@ -35,6 +36,7 @@ export class EntrenamientoRedComponent implements OnInit {
 
   @ViewChild("chart") chart: ChartComponent;
   public chartOptions: Partial<ChartOptions>;
+  public _chartOptions: Partial<ChartOptions>;
 
   datosEntrada : InitTsp;
   fileContent: string;
@@ -42,6 +44,7 @@ export class EntrenamientoRedComponent implements OnInit {
   constructor(private formBuilder: FormBuilder, private entrenamientoService: EntrenamientoService) {
     this.datosEntrada = new InitTsp();
     this.initGrafica();
+    this._initGrafica();
    }
 
   ngOnInit(): void {
@@ -70,12 +73,16 @@ export class EntrenamientoRedComponent implements OnInit {
 
     this.entrenamientoService.postinit(this.datosEntrada).subscribe(result =>{
       const progress = result.progress;
-      for (let i = 0; i < progress.length; i++) {
-        let copy = this.multi;
-        copy[0].series.push({ name: i.toString(), value: progress[i] });
-        this.multi = [...copy];
-      }
-      this.mapCoordenada(result.list_best_route[0])
+      console.log(progress);
+
+      // for (let i = 0; i < progress.length; i++) {
+      //   let copy = this.multi;
+      //   copy[0].series.push({ name: i.toString(), value: progress[i] });
+      //   this.multi = [...copy];
+      // }
+
+      this.mapProgress(result.progress);
+      this.mapCoordenada(result.list_best_route[result.list_best_route.length-1])
     })
   }
 
@@ -100,6 +107,20 @@ export class EntrenamientoRedComponent implements OnInit {
       event.target.value = '';
     };
 
+  }
+
+  mapProgress(progress: number[]) {
+    let copy2 = this._chartOptions.series;
+    let copy3 = this._chartOptions.xaxis;
+
+    for (let i = 0; i < progress.length; i++) {
+      copy2[0].data[i] = progress[i];
+
+      copy3.categories[i] = i;
+      this._chartOptions.xaxis = copy3;
+      this._chartOptions.series = [...copy2];
+
+    }
   }
 
   mapCoordenada(districs: any[]) {
@@ -211,6 +232,45 @@ export class EntrenamientoRedComponent implements OnInit {
       xaxis: {
         categories: [
 
+        ]
+      }
+    };
+  }
+  _initGrafica() {
+    this._chartOptions = {
+      series: [
+        {
+          data: [
+              0
+          ]
+        }
+      ],
+      chart: {
+        height: 350,
+        type: "line",
+        zoom: {
+          enabled: false
+        }
+      },
+      dataLabels: {
+        enabled: false
+      },
+      stroke: {
+        curve: "straight"
+      },
+      title: {
+        text: "Generaciones VS Distancias",
+        align: "left"
+      },
+      grid: {
+        row: {
+          colors: ["transparent", "transparent"], // takes an array which will be repeated on columns
+          opacity: 0.5
+        }
+      },
+      xaxis: {
+        categories: [
+         0
         ]
       }
     };

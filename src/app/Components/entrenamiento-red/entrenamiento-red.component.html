@@ -1,45 +1,46 @@
 <div class="contenedor">
-    <div class="Params_entrada">
-        <label>Parametros de Entrada</label>
-        <form [formGroup]="ParamEnt">
-            <h4>Ubicacion de los barrios</h4>
-            <button type="button" class="btn btn-primary" (click)="fileInput.click()">
-               Cargar Datos
-            </button>
-            <input type="file" id="fileDistrict" hidden #fileInput (change)="onChange($event)" />
-            <h4>Tamaño de la Poblacion</h4>
-            <input type="number" class="form-control" formControlName="pop_size">
-            <h4>Tamaño Elite</h4>
-            <input type="number" class="form-control" formControlName="elite_size">
-            <h4>Ratio de Mutacion</h4>
-            <input type="number" class="form-control" formControlName="mutation_rate">
-            <h4>N° de Generaciones</h4>
-            <input type="number" class="form-control" formControlName="n_generations">
-            <button type="button" (click)="InicializarAlgoritmo()" [disabled]="ParamEnt.invalid" class="btn btn-primary">Iniciar Algoritmo</button>
-        </form>
+  <div class="Params_entrada">
+    <label>Parametros de Entrada</label>
+    <form [formGroup]="ParamEnt">
+      <h4>Ubicacion de los barrios</h4>
+      <button type="button" class="btn btn-primary" (click)="fileInput.click()">
+        Cargar Datos
+      </button>
+      <input type="file" id="fileDistrict" hidden #fileInput (change)="onChange($event)" />
+      <h4>Tamaño de la Poblacion</h4>
+      <input type="number" class="form-control" formControlName="pop_size">
+      <h4>Tamaño Elite</h4>
+      <input type="number" class="form-control" formControlName="elite_size">
+      <h4>Ratio de Mutacion</h4>
+      <input type="number" class="form-control" formControlName="mutation_rate">
+      <h4>N° de Generaciones</h4>
+      <input type="number" class="form-control" formControlName="n_generations">
+      <button type="button" (click)="InicializarAlgoritmo()" [disabled]="ParamEnt.invalid"
+        class="btn btn-primary">Iniciar Algoritmo</button>
+    </form>
+  </div>
+  <div class="Grafica">
+    <label>Grafica</label>
+    <!-- <ngx-charts-line-chart class="grafi" [view]="view" [scheme]="colorScheme" [showXAxisLabel]="showXAxisLabel"
+      [showYAxisLabel]="showYAxisLabel" [xAxis]="xAxis" [yAxis]="yAxis" [xAxisLabel]="xAxisLabel"
+      [yAxisLabel]="yAxisLabel" [timeline]="timeline" [results]="multi" (select)="onSelect($event)"
+      (activate)="onActivate($event)" (deactivate)="onDeactivate($event)">
+    </ngx-charts-line-chart> -->
+    <div id="chart">
+      <apx-chart [series]="_chartOptions.series" [chart]="_chartOptions.chart" [dataLabels]="_chartOptions.dataLabels"
+        [grid]="_chartOptions.grid" [stroke]="_chartOptions.stroke" [title]="_chartOptions.title" [xaxis]="_chartOptions.xaxis"></apx-chart>
     </div>
-    <div class="Grafica">
-        <label>Grafica</label>
-        <ngx-charts-line-chart class="grafi" [view]="view" [scheme]="colorScheme" [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel" [xAxis]="xAxis" [yAxis]="yAxis" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel" [timeline]="timeline" [results]="multi"
-            (select)="onSelect($event)" (activate)="onActivate($event)" (deactivate)="onDeactivate($event)">
-        </ngx-charts-line-chart>
-        <label>Informacion de la red</label>
-        <h4>Numero de Barrios: </h4>
-        <h4>Tamaño de la poblacion: </h4>
-        <h4>Numero de generaciones: </h4>
+    <label>Informacion de la red</label>
+    <h4>Numero de Barrios: </h4>
+    <h4>Tamaño de la poblacion: </h4>
+    <h4>Numero de generaciones: </h4>
+  </div>
+  <div class="Mapa">
+    <label>Grafico de Rutas</label>
+    <!--The content below is only a placeholder and can be replaced.-->
+    <div id="chart" class="image-back">
+      <apx-chart [series]="chartOptions.series" [chart]="chartOptions.chart" [dataLabels]="chartOptions.dataLabels"
+        [grid]="chartOptions.grid" [stroke]="chartOptions.stroke" [title]="chartOptions.title"></apx-chart>
     </div>
-    <div class="Mapa">
-        <label>Grafico de Rutas</label>
-        <!--The content below is only a placeholder and can be replaced.-->
-<div id="chart" class="image-back">
-  <apx-chart
-    [series]="chartOptions.series"
-    [chart]="chartOptions.chart"
-    [dataLabels]="chartOptions.dataLabels"
-    [grid]="chartOptions.grid"
-    [stroke]="chartOptions.stroke"
-    [title]="chartOptions.title"
-  ></apx-chart>
-</div>
-    </div>
+  </div>
 </div>

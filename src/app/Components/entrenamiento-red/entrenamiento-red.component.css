@@ -28,6 +28,10 @@
     text-align: center;
 }
 
+.contenedor .Grafica {
+  width: 700px;
+}
+
 .contenedor .Mapa {
     grid-column-start: 1;
     grid-column-end: -1;
