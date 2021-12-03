@@ -12,7 +12,7 @@ import {
   ApexTitleSubtitle,
   ApexStroke,
   ApexGrid
-} from "ng-apexcharts";
+} from 'ng-apexcharts';
 import { District } from 'src/app/Models/district';
 
 export type ChartOptions = {
@@ -26,7 +26,6 @@ export type ChartOptions = {
 };
 
 
-
 @Component({
   selector: 'app-entrenamiento-red',
   templateUrl: './entrenamiento-red.component.html',
@@ -34,18 +33,19 @@ export type ChartOptions = {
 })
 export class EntrenamientoRedComponent implements OnInit {
 
-  @ViewChild("chart") chart: ChartComponent;
+  @ViewChild('chart') chart: ChartComponent;
   public chartOptions: Partial<ChartOptions>;
   public _chartOptions: Partial<ChartOptions>;
 
-  datosEntrada : InitTsp;
+  datosEntrada: InitTsp;
   fileContent: string;
   vectorDistrict = [];
+
   constructor(private formBuilder: FormBuilder, private entrenamientoService: EntrenamientoService) {
     this.datosEntrada = new InitTsp();
     this.initGrafica();
     this._initGrafica();
-   }
+  }
 
   ngOnInit(): void {
 
@@ -53,17 +53,17 @@ export class EntrenamientoRedComponent implements OnInit {
 
 
   ParamEnt = this.formBuilder.group({
-    pop_size: ['',Validators.required],
-    elite_size: ['',Validators.required],
-    mutation_rate: ['',Validators.required],
-    n_generations: ['',Validators.required],
+    pop_size: ['', Validators.required],
+    elite_size: ['', Validators.required],
+    mutation_rate: ['', Validators.required],
+    n_generations: ['', Validators.required],
   });
 
-  onReset(){
+  onReset() {
     this.ParamEnt.reset();
   }
 
-  InicializarAlgoritmo(){
+  InicializarAlgoritmo() {
 
 
     this.datosEntrada = this.ParamEnt.value;
@@ -71,7 +71,7 @@ export class EntrenamientoRedComponent implements OnInit {
     console.log(this.datosEntrada);
     this.onReset()
 
-    this.entrenamientoService.postinit(this.datosEntrada).subscribe(result =>{
+    this.entrenamientoService.postinit(this.datosEntrada).subscribe(result => {
       const progress = result.progress;
       console.log(progress);
 
@@ -81,9 +81,20 @@ export class EntrenamientoRedComponent implements OnInit {
       //   this.multi = [...copy];
       // }
 
-      this.mapProgress(result.progress);
-      this.mapCoordenada(result.list_best_route[result.list_best_route.length-1])
+      this.mapProgress(result.progress).then(() => {
+      });
+
+
+      this.mapCoordenada(result.list_best_route);
     })
+  }
+
+  private async showCoordenada(value: number[]): Promise<number[]> {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        resolve(value);
+      }, 100);
+    });
   }
 
   onChange(event) {
@@ -109,12 +120,20 @@ export class EntrenamientoRedComponent implements OnInit {
 
   }
 
-  mapProgress(progress: number[]) {
+  private async showProgress(value: number): Promise<number> {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        resolve(value);
+      }, 100);
+    });
+  }
+
+  async mapProgress(progress: number[]): Promise<void> {
     let copy2 = this._chartOptions.series;
     let copy3 = this._chartOptions.xaxis;
 
     for (let i = 0; i < progress.length; i++) {
-      copy2[0].data[i] = progress[i];
+      copy2[0].data[i] = await this.showProgress(progress[i]);
 
       copy3.categories[i] = i;
       this._chartOptions.xaxis = copy3;
@@ -123,16 +142,27 @@ export class EntrenamientoRedComponent implements OnInit {
     }
   }
 
-  mapCoordenada(districs: any[]) {
+  private async mapNewCoords(districs: any[]): Promise<any[]> {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        resolve(districs);
+      }, 100);
+    });
+  }
+
+  async mapCoordenada(districs: any[]) {
     let copy2 = this.chartOptions.series;
 
     for (let i = 0; i < districs.length; i++) {
-      copy2[0].data[i] = [districs[i].x,districs[i].y];
+      const coords = await this.mapNewCoords(districs[i]);
+      for (let j = 0; j < coords.length; j++) {
+        copy2[0].data[j] = [coords[j].x, coords[j].y];
+        this.chartOptions.series = [...copy2];
+      }
+
+      copy2[0].data[coords.length] = [coords[0].x, coords[0].y];
       this.chartOptions.series = [...copy2];
     }
-
-    copy2[0].data[districs.length] = [districs[0].x,districs[0].y];
-    this.chartOptions.series = [...copy2];
   }
 
   mapDistricts() {
@@ -146,53 +176,53 @@ export class EntrenamientoRedComponent implements OnInit {
     }
   }
 
-   //-----------------------------------   Grafica  ---------------------------------------------
-   view: any[] = [700, 300];
+  //-----------------------------------   Grafica  ---------------------------------------------
+  view: any[] = [700, 300];
 
-   //options
-   legend: boolean = true;
-   showLabels: boolean = true;
-   animations: boolean = true;
-   xAxis: boolean = true;
-   yAxis: boolean = true;
-   showYAxisLabel: boolean = true;
-   showXAxisLabel: boolean = true;
-   xAxisLabel: string = 'Generaciones';
-   yAxisLabel: string = 'DistanciaOptima';
-   xAxisLabel2: string = 'x';
-   yAxisLabel2: string = 'y';
-   timeline: boolean = true;
+  //options
+  legend: boolean = true;
+  showLabels: boolean = true;
+  animations: boolean = true;
+  xAxis: boolean = true;
+  yAxis: boolean = true;
+  showYAxisLabel: boolean = true;
+  showXAxisLabel: boolean = true;
+  xAxisLabel: string = 'Generaciones';
+  yAxisLabel: string = 'DistanciaOptima';
+  xAxisLabel2: string = 'x';
+  yAxisLabel2: string = 'y';
+  timeline: boolean = true;
 
-   colorScheme = {
-     domain: ['#3538e0', '#E44D25', '#CFC0BB', '#7aa3e5', '#a8385d', '#aae3f5']
-   };
+  colorScheme = {
+    domain: ['#3538e0', '#E44D25', '#CFC0BB', '#7aa3e5', '#a8385d', '#aae3f5']
+  };
 
-   multi = [
+  multi = [
 
-     {
-       "name": "DistanciaGeneracion",
-       "series": [
-         {
-           "name": "0",
-           "value": 1
-         },
+    {
+      'name': 'DistanciaGeneracion',
+      'series': [
+        {
+          'name': '0',
+          'value': 1
+        },
 
-       ]
-     }
-   ]
+      ]
+    }
+  ]
 
 
-   onSelect(data): void {
-     console.log('Item clicked', JSON.parse(JSON.stringify(data)));
-   }
+  onSelect(data): void {
+    console.log('Item clicked', JSON.parse(JSON.stringify(data)));
+  }
 
-   onActivate(data): void {
-     console.log('Activate', JSON.parse(JSON.stringify(data)));
-   }
+  onActivate(data): void {
+    console.log('Activate', JSON.parse(JSON.stringify(data)));
+  }
 
-   onDeactivate(data): void {
-     console.log('Deactivate', JSON.parse(JSON.stringify(data)));
-   }
+  onDeactivate(data): void {
+    console.log('Deactivate', JSON.parse(JSON.stringify(data)));
+  }
 
   // -------------------------------- Grafica 2 -------------------------------
 
@@ -202,13 +232,13 @@ export class EntrenamientoRedComponent implements OnInit {
       series: [
         {
           data: [
-              [0,0]
+            [0, 0]
           ]
         }
       ],
       chart: {
         height: 350,
-        type: "line",
+        type: 'line',
         zoom: {
           enabled: false
         }
@@ -217,37 +247,36 @@ export class EntrenamientoRedComponent implements OnInit {
         enabled: false
       },
       stroke: {
-        curve: "straight"
+        curve: 'straight'
       },
       title: {
-        text: "Ruta mas optima",
-        align: "left"
+        text: 'Ruta mas optima',
+        align: 'left'
       },
       grid: {
         row: {
-          colors: ["transparent", "transparent"], // takes an array which will be repeated on columns
+          colors: ['transparent', 'transparent'], // takes an array which will be repeated on columns
           opacity: 0.5
         }
       },
       xaxis: {
-        categories: [
-
-        ]
+        categories: []
       }
     };
   }
+
   _initGrafica() {
     this._chartOptions = {
       series: [
         {
           data: [
-              0
+            0
           ]
         }
       ],
       chart: {
         height: 350,
-        type: "line",
+        type: 'line',
         zoom: {
           enabled: false
         }
@@ -256,21 +285,21 @@ export class EntrenamientoRedComponent implements OnInit {
         enabled: false
       },
       stroke: {
-        curve: "straight"
+        curve: 'straight'
       },
       title: {
-        text: "Generaciones VS Distancias",
-        align: "left"
+        text: 'Generaciones VS Distancias',
+        align: 'left'
       },
       grid: {
         row: {
-          colors: ["transparent", "transparent"], // takes an array which will be repeated on columns
+          colors: ['transparent', 'transparent'], // takes an array which will be repeated on columns
           opacity: 0.5
         }
       },
       xaxis: {
         categories: [
-         0
+          0
         ]
       }
     };
